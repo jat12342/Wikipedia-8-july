@@ -3,6 +3,9 @@ from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager,Screen
 from kivy.uix.behaviors import ButtonBehavior
 from kivymd.uix.label import MDLabel
+from kivymd.uix.card import MDCard
+from kivymd.uix.label import MDLabel
+from kivy.metrics import dp
 
 kv='''
 Manager:
@@ -12,19 +15,47 @@ Manager:
 <Fir>:
 	name:'home'
 	
+	MDTextField:
+		id:tf1
+		mode:'rectangle'
+        pos_hint:{'center_x':0.5,'center_y':0.85}  
+        
+	MDTextButton:
+	    text:'SEARCH'        
+        pos_hint:{'center_x':0.5,'center_y':0.78}  	 
+        on_press:app.ad()      
+        
+
+	MDCard:
+		id:mc1
+		pos_hint:{'center_y':0.37}
+		size_hint_y:0.7
+		md_bg_color:1,1,1,0.5
+		elevation:3
+		radius:[30,30,30,30]
+		ScrollView:
+			id:sv1
+			MDBoxLayout:
+				id:b1
+				adaptive_height:True
+				orientation:'vertical'
+				spacing:10
+				padding:10
+				MDCard:
+					adaptive_height:True
+					md_bg_color:1,0,0,0.5
+					halign:'left'
+					size_hint_x:None
+					width:dp(250)
+					radius:[0,0,0,0]
+					MDLabel:
+						text:'Jai Mahakal JAI MAHAKAL JAI MAHAKAL JAI MAHAKAL JAI MAHAKAL JAI MAHAKAL'
+						adaptive_height:True
+				
 
 
-	MDLabel:
-		text:'HAR HAR MAHADEV'
-		halign:'center'		
-		
-		
-	Click:
-		id:l1
-		text:'click state 1'
-		size_hint:0.3,0.1
-		pos_hint:{'center_x':0.5,'center_y':0.8}
-		on_press:app.c()
+
+
 
 	MDTopAppBar:
 		id:t1
@@ -47,8 +78,6 @@ class Fir(Screen):
 class Sec(Screen):
 	pass	
 	
-class Click(ButtonBehavior,MDLabel):
-	pass	
 
 		
 class Demo(MDApp):
@@ -57,17 +86,24 @@ class Demo(MDApp):
 		self.a=False
 		return self.b
 		
-	def c(self):
-		aa=self.b.get_screen('home').ids.l1
+	def ad(self):
+		tex=self.b.get_screen('home').ids.tf1.text
+		b=self.b.get_screen('home').ids.b1
+		
 		if self.a:
-			aa.text='click state 1'		
-			self.b.get_screen('home').ids.t1.title='HAR HAR MAHADEV'			
-								
+			m=MDCard(adaptive_height=True,md_bg_color=(0,0,1,1),radius=[0,0,0,0],halign='right',size_hint_x=None,width=dp(250),pos_hint={'right':1})		
+			l=MDLabel(text=f'{tex}',adaptive_height=True)
+			m.add_widget(l)
+			b.add_widget(m)
+			
 		else:
-			aa.text='click state 2'
-			self.b.get_screen('home').ids.t1.title='JAI MAHAKAL'
-								
-		self.a = not self.a		
+			m1=MDCard(adaptive_height=True,md_bg_color=(1,0,1,1),radius=[0,0,0,0],halign='left',size_hint_x=None,width=dp(250),pos_hint={'left':1})		
+			l1=MDLabel(text=tex,adaptive_height=True)
+			m1.add_widget(l1)
+			b.add_widget(m1)			
+						
+		self.a = not self.a								
+			
 		
 			
 
