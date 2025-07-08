@@ -6,6 +6,9 @@ from kivymd.uix.label import MDLabel
 from kivymd.uix.card import MDCard
 from kivymd.uix.label import MDLabel
 from kivy.metrics import dp
+from kivymd.toast import toast
+import wikipedia
+import requests
 
 kv='''
 Manager:
@@ -89,20 +92,32 @@ class Demo(MDApp):
 	def ad(self):
 		tex=self.b.get_screen('home').ids.tf1.text
 		b=self.b.get_screen('home').ids.b1
-		
-		if self.a:
-			m=MDCard(adaptive_height=True,md_bg_color=(0,0,1,1),radius=[0,0,0,0],halign='right',size_hint_x=None,width=dp(250),pos_hint={'right':1})		
-			l=MDLabel(text=f'{tex}',adaptive_height=True)
-			m.add_widget(l)
-			b.add_widget(m)
+		if tex.strip()=='':
+			toast(str('PLEASE ENTER PARAMETER FIRST'))
 			
-		else:
-			m1=MDCard(adaptive_height=True,md_bg_color=(1,0,1,1),radius=[0,0,0,0],halign='left',size_hint_x=None,width=dp(250),pos_hint={'left':1})		
-			l1=MDLabel(text=tex,adaptive_height=True)
-			m1.add_widget(l1)
-			b.add_widget(m1)			
+		else:							
+			try:
+				s1=wikipedia.summary(tex)
+				m=MDCard(adaptive_height=True,md_bg_color=(0,0,1,1),radius=[0,0,0,0],halign='center3')		
+				if self.a:
+					m.md_bg_color=(1,0,0,1)
+					
+				else:
+					m.md_bg_color=(0,1,0,1)										
+				l=MDLabel(text=s1,adaptive_height=True)
+				m.add_widget(l)
+				b.add_widget(m)
+				self.a = not self.a
+				
+			except requests.exceptions.RequestException:
+				toast(str('NO INTERNET CONNECTION'))		
+				
 						
-		self.a = not self.a								
+				
+				
+				
+			except Exception as e:
+				toast(str(e))																									
 			
 		
 			
